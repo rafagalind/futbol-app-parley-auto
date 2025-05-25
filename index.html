@@ -1,31 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Generador de Parley Inteligente</title>
 </head>
 <body>
   <h1>Selecciona los Equipos</h1>
   <form id="formEquipos">
-    <label>Equipo A:</label>
-    <select id="equipo1">
-      <option>Real Madrid</option>
-      <option>Barcelona</option>
-      <option>Manchester City</option>
-      <option>Liverpool</option>
-      <option>PSG</option>
-      <option>Bayern Munich</option>
-    </select>
+    <label for="equipo1">Equipo A:</label>
+    <select id="equipo1"></select>
 
-    <label>Equipo B:</label>
-    <select id="equipo2">
-      <option>Barcelona</option>
-      <option>Real Madrid</option>
-      <option>Manchester United</option>
-      <option>Arsenal</option>
-      <option>Inter</option>
-      <option>Juventus</option>
-    </select>
+    <label for="equipo2">Equipo B:</label>
+    <select id="equipo2"></select>
 
     <button type="submit">Analizar</button>
   </form>
@@ -34,6 +20,25 @@
   <pre id="resultado"></pre>
 
   <script>
+    async function cargarEquipos() {
+      const res = await fetch("/api/equipos");
+      const equipos = await res.json();
+      const select1 = document.getElementById("equipo1");
+      const select2 = document.getElementById("equipo2");
+
+      equipos.forEach(equipo => {
+        const opt1 = document.createElement("option");
+        opt1.value = equipo;
+        opt1.textContent = equipo;
+        select1.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = equipo;
+        opt2.textContent = equipo;
+        select2.appendChild(opt2);
+      });
+    }
+
     document.getElementById("formEquipos").addEventListener("submit", async (e) => {
       e.preventDefault();
       const equipo1 = document.getElementById("equipo1").value;
@@ -42,6 +47,9 @@
       const data = await res.json();
       document.getElementById("resultado").textContent = JSON.stringify(data, null, 2);
     });
+
+    cargarEquipos();
   </script>
 </body>
 </html>
+
